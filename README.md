@@ -76,7 +76,7 @@ robot -d "ResultFolderpath" -x "xUnit XML Folder path" --variable ENV:PF --varia
 1.0
 
 ## Team
-* **Niket Shinde** - *contributor* - [email](niket.shinde@tieto.com)
+* **Niket Shinde** - *contributor* - [email](niket.shinde22@gmail.com)
 
 ## Acknowledgments 
 
