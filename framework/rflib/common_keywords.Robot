@@ -114,7 +114,8 @@ Before Web Test Start
     Update Dictionary for Test Data
     ${BROWSER}=  set value  ${BROWSER}  ${GLOBAL_TEST_DICTONARY['ITR1']}    key=BROWSER
     ${bool}=  Is Chrome  ${BROWSER}
-    Run keyword if  "${bool}" == "True"   Run Test In Chrome Browser
+    #Run keyword if  "${bool}" == "True"   Run Test In Chrome Browser
+    Run keyword if  ${False}   Run Test In Chrome Browser
     ...  ELSE  open browser  about:blank  ${BROWSER}
     Maximize Browser Window
     Delete All Cookies
