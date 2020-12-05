@@ -24,10 +24,6 @@ Suite Teardown  After Suite End
 
 *** Test Cases ***
 # Run Commod : robot -d results tests/SmokeTest.robot
-Challenge 1
-    [Documentation]    Test Google Search, *Author:Niket*
-    [Tags]  GoogleTest
-    #appplication1_keywords.Perform Google Search  ITR1
 
 Challenge 2
     [Documentation]    Test Google Search, *Author:Niket*
