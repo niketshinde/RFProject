@@ -153,7 +153,7 @@ def get_value_from_xml(xml, node_name):
 
 def get_value_from_xml_string(xml_text, node_name):
     """
-    Author : Snehal Rakshe
+    Author : Niket Shinde
     :param xml:
     :param node_name:
     :return:

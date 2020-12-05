@@ -56,6 +56,7 @@ Before Suite Start
     #Set To Dictionary  ${SUITE METADATA}  Executed By=%{USERNAME}
     #set global variable  ${SUITE METADATA}
 
+    Add Location Strategy	custom	Custom Locator Strategy
 
 After Suite End
     [Documentation]  After Suite End
@@ -235,29 +236,18 @@ Create EDI File on Server Location
     ${edi_file_path}=  set variable  ${PROJECT_PATH}/RequestTemplates/ProdatMessages/${message_type}.edi
     ${EDI_file_location}=  Create Edi File  ${edi_file_path}  ${API_DICTIONARY}  ${PROJECT_PATH}/  ${ENVIRONMENT['EDI_PATH']}
 
-EDI File - Process UTIL Message
-    [Documentation]    Create EDI File and Copy to Server location
-    ...                Author             :       Snehal Rakshe
-    [Arguments]  ${ITR}  ${message_type}
-    Commonkeywords.Keyword Setup  ${ITR}
-    ${CREATION_DATE}=  Get Timestamp  ${DATA_DICTIONARY['EDI_CREATION_DATE']}  ${4}
-    Commonkeywords.Add value to Template  CREATION_DATE  ${CREATION_DATE}
-    Commonkeywords.Add value to Template  DELIVERYSITE_ID  ${DATA_DICTIONARY['DS_ID']}
-    Commonkeywords.Add value to Template  ERRAND_REF  ${DATA_DICTIONARY['ERRAND_REF']}
-    Commonkeywords.Add value to Template  MESSAGE_ID  ${DATA_DICTIONARY['MESSAGE_ID']}
-    Commonkeywords.Add value to Template  METER_NO  ${DATA_DICTIONARY['ERRAND_REF']}
-    ${METER_READING_START_DATE}=  Get Timestamp  ${DATA_DICTIONARY['EDI_METER_READING_START']}  ${2}
-    Commonkeywords.Add value to Template  EDI_METER_READING_START  ${METER_READING_START_DATE}
-    ${METER_READING_END_DATE}=  Get Timestamp  ${DATA_DICTIONARY['EDI_METER_READING_END']}  ${2}
-    Commonkeywords.Add value to Template  EDI_METER_READING_END  ${METER_READING_END_DATE}
-
-
-    Commonkeywords.Create EDI File on Server Location  ${ITR}  ${message_type}
-    [Teardown]  Commonkeywords.Keyword Teardown  ${ITR}
-
 
 Sleep App
     sleep  ${RUN_SETTINGS['SLEEP_TIME']}
 
+
+Custom Locator Strategy
+    [Documentation]    work with multiple locators
+    ...                Author             :       Niket Shinde
+    [Arguments]  	${browser}  ${locator}  ${tag}  ${constraints}
+
+    ${element}=	get element with custom locator  ${browser}  ${locator}  ${tag}  ${constraints}
+
+    [Return]	${element}
 
 

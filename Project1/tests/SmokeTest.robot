@@ -11,7 +11,7 @@ Default Tags    Smoke Test
 Resource  ../../framework/rflib/common_keywords.Robot
 
 # Keywords Files
-Resource  ../apps/google/google_keywords.robot
+Resource  ../apps/application1/application1_keywords.robot
 
 # Configure Test Run
 Suite Setup  Before Suite Start
@@ -26,9 +26,12 @@ Suite Teardown  After Suite End
 Test Google Search
     [Documentation]    Test Google Search, *Author:Niket*
     [Tags]  GoogleTest
-    google_keywords.Perform Google Search  ITR1
+    appplication1_keywords.Perform Google Search  ITR1
 
-
+Test Google Search2
+    [Documentation]    Test Google Search, *Author:Niket*
+    [Tags]  GoogleTest
+    appplication1_keywords.Check I'm Feeling Lucky functionality  ITR1
 
 
 

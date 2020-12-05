@@ -7,6 +7,8 @@ import datetime
 import time
 from robot.api import logger
 import shutil
+from selenium.webdriver.remote import webdriver
+
 
 def marge_dictionaries(to_dict, *args):
     '''
@@ -19,7 +21,7 @@ def marge_dictionaries(to_dict, *args):
     for dictionary in args:
         to_dict.update(dictionary)
 
-    logger.debug('<B>Marged dictionary : </B>'+str(to_dict), html=True)
+    logger.debug('<B>Marged dictionary : </B>' + str(to_dict), html=True)
     return to_dict
 
 
@@ -117,7 +119,7 @@ def ini_to_dictionary(int_file_path, section, dictionary_properties={}):
         except:
             print("exception on %s!" % option.upper())
             dictionary_properties[option.upper()] = None
-    logger.debug("Value From section ' "+section+"' : "+str(dictionary_properties))
+    logger.debug("Value From section ' " + section + "' : " + str(dictionary_properties))
     return dictionary_properties
 
 
@@ -136,8 +138,8 @@ def get_file_data(path):
             file_data.close()
             return text
     except IOError as e:
-            print("Error: can\'t find file or read data")
-            print("Exception : " + e)
+        print("Error: can\'t find file or read data")
+        print("Exception : " + e)
 
 
 def set_value(variable, value_from, key=None):
@@ -155,7 +157,7 @@ def set_value(variable, value_from, key=None):
     else:
         temp = value_from
 
-    logger.debug("Set value of variable : "+str(temp))
+    logger.debug("Set value of variable : " + str(temp))
     return temp
 
 
@@ -167,10 +169,10 @@ def create_profile(path):
     """
     from selenium import webdriver
     fp = webdriver.FirefoxProfile()
-    fp.set_preference("browser.download.folderList",2)
+    fp.set_preference("browser.download.folderList", 2)
     fp.set_preference("browser.download.manager.showWhenStarting", False)
     fp.set_preference("browser.download.dir", path)
-    fp.set_preference("browser.helperApps.neverAsk.saveToDisk",'application/csv')
+    fp.set_preference("browser.helperApps.neverAsk.saveToDisk", 'application/csv')
     fp.update_preferences()
     return fp.path
 
@@ -180,10 +182,12 @@ def run_soapUI_test():
     Author : Niket Shinde
     :return:
     """
-    output = subprocess.Popen((r"C:\Users\shindnik\MyProject\python\MyNotes\my_text_file1.bat", "an_argument", "another_argument"), stdout=subprocess.PIPE).stdout
+    output = subprocess.Popen(
+        (r"C:\Users\shindnik\MyProject\python\MyNotes\my_text_file1.bat", "an_argument", "another_argument"),
+        stdout=subprocess.PIPE).stdout
     result = ""
     for line in output:
-        result += str (line) + '\n'
+        result += str(line) + '\n'
     output.close()
     return result
 
@@ -207,15 +211,15 @@ def create_edi_file(template_path, value_dictionary, project_path, edifile_path)
     :return:
     """
     template_data = get_file_data(template_path)
-    logger.debug('<b>EDI Template before update values : </b> <BR>'+template_data, html=True)
-    logger.debug('<b>values dictionary : </b> <BR>'+str(value_dictionary), html=True)
+    logger.debug('<b>EDI Template before update values : </b> <BR>' + template_data, html=True)
+    logger.debug('<b>values dictionary : </b> <BR>' + str(value_dictionary), html=True)
     # Enter value in EDI template
     for keys, values in value_dictionary.items():
-        logger.debug('<b>Before '+keys+' :  </b> <BR>' + str(values), html=True)
-        template_data = template_data.replace('$'+keys.upper()+'$', str(values))
-    print('*HTML*<b>EDI Template with update values : </b> <BR>'+template_data)
+        logger.debug('<b>Before ' + keys + ' :  </b> <BR>' + str(values), html=True)
+        template_data = template_data.replace('$' + keys.upper() + '$', str(values))
+    print('*HTML*<b>EDI Template with update values : </b> <BR>' + template_data)
 
-    template_name = template_path[template_path.rfind('/')+1:template_path.rfind('.')]
+    template_name = template_path[template_path.rfind('/') + 1:template_path.rfind('.')]
     edi_file_name = "AT_" + template_name + get_timestamp(str(datetime.datetime.today()), 1) + ".edi"
     file_name = project_path + "results\\" + edi_file_name
     file = open(file_name, "w")
@@ -223,7 +227,7 @@ def create_edi_file(template_path, value_dictionary, project_path, edifile_path)
     logger.debug('<b>EDI file create at local location : </b> <BR>' + str(file_name), html=True)
     file.close()
     source = file_name
-    destination = edifile_path+edi_file_name
+    destination = edifile_path + edi_file_name
     # os.rename(source, destination)
     shutil.move(source, destination)
     logger.debug('<b>EDI file  moved from local to server location : </b> <BR>' + str(destination), html=True)
@@ -239,20 +243,20 @@ def get_timestamp(from_datetime=None, format_num=1):
     """
     format_dictionary = {
         1: "%d%m%y%H%M%S",  # 110919130142
-        2: "%Y%m%d",    # 20190911
-        3: "%H%M%S",    # 130237
-        4: "%Y%m%d%H%M",    # 201909111302
-        5: "%#m/%d/%y",     # 9/11/19
-        6: "%#m/%d/%Y",     # 9/11/2019
-        7: "%#m/%d/%Y %H:%M",   # 9/11/2019 11:55
-        8: "%d%m%y%H%M%S%f",  #160819122257349053
-        9: "%H%M%S%f",  #122551300096
+        2: "%Y%m%d",  # 20190911
+        3: "%H%M%S",  # 130237
+        4: "%Y%m%d%H%M",  # 201909111302
+        5: "%#m/%d/%y",  # 9/11/19
+        6: "%#m/%d/%Y",  # 9/11/2019
+        7: "%#m/%d/%Y %H:%M",  # 9/11/2019 11:55
+        8: "%d%m%y%H%M%S%f",  # 160819122257349053
+        9: "%H%M%S%f",  # 122551300096
         10: "",
         11: "",
         12: ""
     }
     datetime_value = dateutil.parser.parse(from_datetime).timestamp()
-    #print(datetime_value)
+    # print(datetime_value)
     formatted_datetime = datetime.datetime.fromtimestamp(datetime_value).strftime(format_dictionary[format_num])
     print('get_timestamp : ', formatted_datetime)
     return formatted_datetime
@@ -272,7 +276,7 @@ def get_GS1_number(initial_number, number_len):
     timestamp = datetime.datetime.timestamp(now)
     timestamp = str(timestamp)[::-1]
     GSIN = (initial_number + str(timestamp)).replace('.', '')
-    number_size = int(number_len)-1
+    number_size = int(number_len) - 1
     logger.debug("random number : " + GSIN[:number_size], html=True)
     sum = 0
     j = 1
@@ -280,8 +284,8 @@ def get_GS1_number(initial_number, number_len):
         number = int(i)
         sum += number * 3 if j % 2 == 0 else number * 1
         j += 1
-    #print("sum : ", sum)
-    #print("Last digit : ", 10 - (sum % 10))
+    # print("sum : ", sum)
+    # print("Last digit : ", 10 - (sum % 10))
     GS1_number = GSIN[:number_size] + str(10 - (sum % 10)) if sum % 10 != 0 else GSIN[:number_size] + '0'
     print("Valid GS1 Number : ", GS1_number)
     return GS1_number
@@ -309,14 +313,14 @@ def get_SSN(country_name):
     return SSN
 
 
-def add_record(data_dictionary, path, Order_Portal_fields, num=1 ,delimiter_char=',', first_record='N'):
-    #OrderPortal_fields = 'OrderGroup,CampaignCode,CustomerCode,FirstName,LastName,Type,PersonOrOrganizationNumber,BusinessPhone,MobilePhone,HomePhone,Language,EmailAddress,MainAddressStreetName,MainAddressStreetNumber,MainAddressFloor,MainAddressApartment,MainAddressPostalCode,MainAddressCity,MainAddressCountry,MainAddressAttention,MainAddressCareOf,DeliverySiteType,DeliverySiteStreetName,DeliverySiteStreetNumber,DeliverySiteFloor,DeliverySiteApartment,DeliverySitePostalCode,DeliverySiteCity,DeliverySiteCountry,DeliverySiteAttention,GridAuthor,GridArea,BalanceResponsible,MeteringMethod,SettlementMethod,MeterPointNumber,Eldependency,ConsumptionCode,SelectedStandardcontract,ProductID1,ProductID2,ProductID3,ProductID4,ProductID5,ProductID6,ProductID7,ProductID8,ProductID9,ProductID10,StartDate,SalesChannel,ResponseChannel,ResponseDate,PriceDate,VersionDate,AddtionalInfo,InvoiceGroupName,ClerkName,ReasonCode,InvoiceType,InvoiceCode,IsNegativeResponse,InvoiceAddressStreetName,InvoiceAddressStreetNumber,InvoiceAddressFloor,InvoiceAddressApartment,InvoiceAddressPostalCode,InvoiceAddressCity,InvoiceAddressCountry,InvoiceDistribution,ManualInvEmailAddress,ManualInvPhoneNumber,InvoiceAddressAttention,InvoiceAddressCareOf,InvoiceOutputType,PayTerm,InvGroup,ConfirmationType,RestrictionId1,RestrictionValue1,RestrictionId2,RestrictionValue2,RestrictionId3,RestrictionValue3,RestrictionId4,RestrictionValue4,RestrictionId5,RestrictionValue5,RestrictionId6,RestrictionValue6,RestrictionId7,RestrictionValue7,RestrictionId8,RestrictionValue8,RestrictionId9,RestrictionValue9,RestrictionId10,RestrictionValue10,ProxyFlag,PropertyAuthor,EstimatedConsumption,PreviousOccupants,OrderId'
+def add_record(data_dictionary, path, Order_Portal_fields, num=1, delimiter_char=',', first_record='N'):
+    # OrderPortal_fields = 'OrderGroup,CampaignCode,CustomerCode,FirstName,LastName,Type,PersonOrOrganizationNumber,BusinessPhone,MobilePhone,HomePhone,Language,EmailAddress,MainAddressStreetName,MainAddressStreetNumber,MainAddressFloor,MainAddressApartment,MainAddressPostalCode,MainAddressCity,MainAddressCountry,MainAddressAttention,MainAddressCareOf,DeliverySiteType,DeliverySiteStreetName,DeliverySiteStreetNumber,DeliverySiteFloor,DeliverySiteApartment,DeliverySitePostalCode,DeliverySiteCity,DeliverySiteCountry,DeliverySiteAttention,GridAuthor,GridArea,BalanceResponsible,MeteringMethod,SettlementMethod,MeterPointNumber,Eldependency,ConsumptionCode,SelectedStandardcontract,ProductID1,ProductID2,ProductID3,ProductID4,ProductID5,ProductID6,ProductID7,ProductID8,ProductID9,ProductID10,StartDate,SalesChannel,ResponseChannel,ResponseDate,PriceDate,VersionDate,AddtionalInfo,InvoiceGroupName,ClerkName,ReasonCode,InvoiceType,InvoiceCode,IsNegativeResponse,InvoiceAddressStreetName,InvoiceAddressStreetNumber,InvoiceAddressFloor,InvoiceAddressApartment,InvoiceAddressPostalCode,InvoiceAddressCity,InvoiceAddressCountry,InvoiceDistribution,ManualInvEmailAddress,ManualInvPhoneNumber,InvoiceAddressAttention,InvoiceAddressCareOf,InvoiceOutputType,PayTerm,InvGroup,ConfirmationType,RestrictionId1,RestrictionValue1,RestrictionId2,RestrictionValue2,RestrictionId3,RestrictionValue3,RestrictionId4,RestrictionValue4,RestrictionId5,RestrictionValue5,RestrictionId6,RestrictionValue6,RestrictionId7,RestrictionValue7,RestrictionId8,RestrictionValue8,RestrictionId9,RestrictionValue9,RestrictionId10,RestrictionValue10,ProxyFlag,PropertyAuthor,EstimatedConsumption,PreviousOccupants,OrderId'
     record = ''
     if first_record.upper() == 'N':
         if num == 1:
             for x in Order_Portal_fields.split(delimiter_char):
-                if ('OP_'+x) in data_dictionary.keys():
-                        record = record + data_dictionary['OP_'+x] + delimiter_char
+                if ('OP_' + x) in data_dictionary.keys():
+                    record = record + data_dictionary['OP_' + x] + delimiter_char
                 else:
                     record = record + delimiter_char
         else:
@@ -325,18 +329,18 @@ def add_record(data_dictionary, path, Order_Portal_fields, num=1 ,delimiter_char
                 for x in Order_Portal_fields.split(delimiter_char):
                     if ('OP_' + x) in data_dictionary.keys():
                         if ('OP_' + x) in ['OP_FirstName', 'OP_LastName']:
-                            record = record + data_dictionary['OP_' + x]+str(n) + delimiter_char
+                            record = record + data_dictionary['OP_' + x] + str(n) + delimiter_char
                         elif ('OP_' + x) in ['OP_OrderId']:
                             record = record + create_string('orderid') + delimiter_char
                         elif ('OP_' + x) in ['OP_OrderGroup']:
                             record = record + create_string('OrderGroup') + delimiter_char
-                        elif('OP_' + x) in ['OP_PersonOrOrganizationNumber']:
+                        elif ('OP_' + x) in ['OP_PersonOrOrganizationNumber']:
                             record = record + get_SSN('Sweden') + delimiter_char
                         elif ('OP_' + x) in ['OP_MeterPointNumber']:
                             record = record + get_GS1_number('735999', '18') + delimiter_char
-                        elif ('OP_' + x) in ['OP_EmailAddress','OP_ManualInvEmailAddress']:
+                        elif ('OP_' + x) in ['OP_EmailAddress', 'OP_ManualInvEmailAddress']:
                             email_array = (data_dictionary['OP_EmailAddress']).split('@')
-                            record = record + email_array[0]+str(n)+'@'+email_array[1] + delimiter_char
+                            record = record + email_array[0] + str(n) + '@' + email_array[1] + delimiter_char
                         else:
                             record = record + data_dictionary['OP_' + x] + delimiter_char
                     else:
@@ -345,7 +349,7 @@ def add_record(data_dictionary, path, Order_Portal_fields, num=1 ,delimiter_char
         create_file(path, record[:len(record) - 1] + '\n')
     else:
         record = Order_Portal_fields
-        create_file(path, record+'\n', 'w+')
+        create_file(path, record + '\n', 'w+')
     # print('*HTML* <B> Record Added : </B> <textarea rows="4" cols="50"> ',record,' </textarea>')
     return record
 
@@ -375,9 +379,8 @@ def create_string(key, value=None):
     return value
 
 
-
 def validate_order_status(class_name, expected='success'):
-    if expected.lower() == 'invalid' : expected = 'danger'
+    if expected.lower() == 'invalid': expected = 'danger'
     if expected.lower() == 'ready to submit': expected = 'warning'
     if class_name.find('success') != -1:
         if expected.lower().strip() == 'success':
@@ -396,26 +399,61 @@ def validate_order_status(class_name, expected='success'):
     elif class_name.find('failed') != -1 and expected.lower().strip() == 'failed':
         if expected.lower().strip() == 'failed':
             print('status is "Failed"')
-            return{'status': True, 'msg': 'status is "Failed"'}
+            return {'status': True, 'msg': 'status is "Failed"'}
         else:
             print('*ERROR* status is not "Failed')
-            return{'status': False, 'msg': 'status is not "Failed"'}
+            return {'status': False, 'msg': 'status is not "Failed"'}
     elif class_name.find('danger') != -1:
         if expected.lower().strip() == 'danger':
             print('status is "Invalid"')
-            return{'status': True, 'msg': 'status is "Invalid"'}
+            return {'status': True, 'msg': 'status is "Invalid"'}
         else:
             print('*ERROR* status is not "Invalid" ')
-            return{'status': False, 'msg': 'status is not "Invalid" '}
+            return {'status': False, 'msg': 'status is not "Invalid" '}
     else:
         print('*ERROR* invalid class name : ', class_name)
-        return{'status': False, 'msg': '*ERROR* invalid class name : '+class_name}
+        return {'status': False, 'msg': '*ERROR* invalid class name : ' + class_name}
 
 
 def checkDictKeyExists(dict, key):
     if key in dict.keys():
-        dicKeyExists =  True
+        dicKeyExists = True
     else:
         dicKeyExists = False
 
-    return  dicKeyExists
+    return dicKeyExists
+
+
+def get_element_with_custom_locator(driver: webdriver, locators: str, tag, constraints):
+    print(locators)
+    xpaths= locators.split( "$$")
+    for i in xpaths:
+        print(i)
+        element = driver.find_elements_by_xpath(i)
+        print("element found:", element)
+        if len(element)>=1:
+            break
+    return element[0]
+
+
+def get_company_name_with_maximum_point(*list_of_com):
+    com_dict={}
+    for i in list_of_com:
+        if i == 'test' or i == '' or i =='Sr. No Organization Points':
+            continue
+        info = i.split(" ")
+
+        com_dict[info[0]] = [" ".join(info[1:len(info)-1]), info[len(info)-1].replace(",","")]
+    max_point = int(com_dict['1'][1])
+    max_com_name = com_dict['1'][0]
+    for key in com_dict.keys():
+        if max_point < int(com_dict[key][1]):
+            max_point = int(com_dict[key][1])
+            max_com_name = com_dict['1'][0]
+    return max_com_name
+
+def get_name_of_company(*list_of_com):
+    return  list_of_com[2]
+
+def compare_string(str1, str2):
+    return str1.find(str2) > -1
